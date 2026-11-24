@@ -53,7 +53,7 @@
       </search-form>
 
       <!-- 操作按钮区 -->
-      <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
+      <el-row :gutter="10" class="table-toolbar mb8 toolbar-row action-buttons">
         <el-col :span="1.5">
           <el-button
             type="danger"
@@ -76,7 +76,6 @@
           >下载
           </el-button>
         </el-col>
-        <right-toolbar v-model:showSearch="showSearch" v-model:viewMode="viewMode" :showViewSwitch="true" @queryTable="getList"></right-toolbar>
       </el-row>
     </div>
 
@@ -421,7 +420,7 @@ const showSearch = ref<boolean>(true)
 const ids = ref<number[]>([])
 const multiple = ref<boolean>(true)
 const total = ref<number>(0)
-const viewMode = ref<string>('card') // 'list' 或 'card'
+const viewMode = ref<string>('list') // 'list' 或 'card'
 
 // 播放
 const easyPlayerOpen = ref(false)

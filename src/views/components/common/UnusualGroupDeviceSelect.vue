@@ -55,7 +55,7 @@
           </el-form-item>
         </search-form>
 
-        <el-row :gutter="10" class="mb8 toolbar-row">
+        <el-row :gutter="10" class="table-toolbar mb8 toolbar-row">
           <el-col :span="1.5">
             <el-button
                 type="primary"
@@ -78,7 +78,6 @@
             >全部清除
             </el-button>
           </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="queryListByParentForUnusualFun"></right-toolbar>
         </el-row>
 
         <div class="table-wrapper">

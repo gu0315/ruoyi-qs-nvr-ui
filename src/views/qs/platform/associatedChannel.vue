@@ -39,7 +39,7 @@
         </search-form>
       </div>
 
-      <el-row :gutter="10" class="mb8">
+      <el-row :gutter="10" class="table-toolbar mb8">
         <el-col :span="1.5" v-if="!hasLink">
           <el-button type="primary"
                      plain
@@ -75,7 +75,6 @@
             移除所有设备
           </el-button>
         </el-col>
-        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table v-loading="loading" :data="channelList" @selection-change="handleSelectionChange" border class="custom-table">

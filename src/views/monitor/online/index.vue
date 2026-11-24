@@ -18,8 +18,7 @@
         </el-form-item>
       </search-form>
 
-      <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
-        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+      <el-row :gutter="10" class="table-toolbar mb8 toolbar-row action-buttons">
       </el-row>
     </div>
 

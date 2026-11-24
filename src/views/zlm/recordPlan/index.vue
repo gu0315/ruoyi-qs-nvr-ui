@@ -19,7 +19,7 @@
       </search-form>
 
       <!-- 操作按钮区 -->
-      <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
+      <el-row :gutter="10" class="table-toolbar mb8 toolbar-row action-buttons">
         <el-col :span="1.5">
           <el-button
             type="primary"
@@ -52,7 +52,6 @@
           >删除
           </el-button>
         </el-col>
-        <right-toolbar v-model:showSearch="showSearch" v-model:viewMode="viewMode" :showViewSwitch="true" @queryTable="getList"></right-toolbar>
       </el-row>
     </div>
 
@@ -230,7 +229,7 @@ const total = ref<number>(0)
 const title = ref<string>("")
 const byteTime = ref("");
 const id = ref(null);
-const viewMode = ref<string>('card')
+const viewMode = ref<string>('list')
 
 
 const openLink = ref(false);

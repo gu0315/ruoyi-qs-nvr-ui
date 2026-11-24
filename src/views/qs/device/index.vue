@@ -50,7 +50,18 @@
       </el-form-item>
     </search-form>
 
-    <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
+    <!-- 工具栏：单个通道的编辑、删除在卡片的「…」菜单里；这里只放批量删除和新增 -->
+    <el-row :gutter="10" class="table-toolbar mb8 toolbar-row action-buttons">
+      <el-col :span="1.5">
+        <el-button
+            type="danger"
+            plain
+            :disabled="multiple"
+            @click="handleBatchDelete"
+            class="action-btn delete-btn"
+        >批量删除{{ ids.length ? `（${ids.length}）` : '' }}
+        </el-button>
+      </el-col>
       <el-col :span="1.5">
         <el-button
             type="primary"
@@ -61,29 +72,6 @@
         >新增
         </el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="success"
-            plain
-            icon="Edit"
-            :disabled="single"
-            @click="handleUpdate"
-            class="action-btn edit-btn"
-        >修改
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="danger"
-            plain
-            icon="Delete"
-            :disabled="multiple"
-            @click="handleDelete"
-            class="action-btn delete-btn"
-        >删除
-        </el-button>
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" v-model:viewMode="viewMode" :showViewSwitch="true" @queryTable="getList"></right-toolbar>
     </el-row>
     </div>
 
@@ -5991,6 +5979,21 @@ function submitForm() {
 }
 
 /** 删除按钮操作 */
+/** 批量删除勾选的通道（卡片视图工具栏） */
+function handleBatchDelete() {
+  const _ids = [...ids.value]
+  if (!_ids.length) return
+  proxy.$modal.confirm(`确定删除选中的 ${_ids.length} 个通道吗？删除后不可恢复。`).then(function () {
+    return delDevice(_ids)
+  }).then(() => {
+    ids.value = []
+    single.value = true
+    multiple.value = true
+    getList()
+    proxy.$modal.msgSuccess("删除成功")
+  }).catch(() => {})
+}
+
 function handleDelete(row: QsDevice) {
   const _ids = row.id || ids.value
   proxy.$modal.confirm('是否确认删除视频监控设备编号为"' + _ids + '"的数据项？').then(function () {

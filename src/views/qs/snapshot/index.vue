@@ -40,7 +40,7 @@
         </el-form-item>
       </search-form>
 
-      <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
+      <el-row :gutter="10" class="table-toolbar mb8 toolbar-row action-buttons">
         <el-col :span="1.5">
           <el-button
             type="danger"
@@ -60,7 +60,6 @@
             @click="handleExport"
           >导出</el-button>
         </el-col>
-        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
     </div>
 

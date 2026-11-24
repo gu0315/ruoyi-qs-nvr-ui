@@ -24,7 +24,7 @@
         </el-form-item>
       </search-form>
 
-      <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
+      <el-row :gutter="10" class="table-toolbar mb8 toolbar-row action-buttons">
         <el-col :span="1.5">
           <el-button
             type="primary"
@@ -57,7 +57,6 @@
           >删除
           </el-button>
         </el-col>
-        <right-toolbar v-model:showSearch="showSearch" v-model:viewMode="viewMode" :showViewSwitch="true" @queryTable="getList"/>
       </el-row>
     </div>
 
@@ -500,7 +499,7 @@ import {
 const {proxy} = getCurrentInstance();
 
 const showSearch = ref(true);
-const viewMode = ref('card');
+const viewMode = ref('list');
 const loading = ref(true);
 const open = ref(false);
 const ids = ref([]);

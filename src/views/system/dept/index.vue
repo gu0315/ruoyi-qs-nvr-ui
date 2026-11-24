@@ -23,7 +23,7 @@
       </search-form>
       </transition>
 
-      <el-row :gutter="10" class="mb8">
+      <el-row :gutter="10" class="table-toolbar mb8">
          <el-col :span="1.5">
             <el-button
                type="primary"
@@ -50,7 +50,6 @@
                @click="toggleExpandAll"
             >展开/折叠</el-button>
          </el-col>
-         <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table

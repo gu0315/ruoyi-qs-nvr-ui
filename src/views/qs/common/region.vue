@@ -76,7 +76,7 @@
             </search-form>
 
             <!-- 操作按钮区 -->
-            <el-row :gutter="10" class="mb8 toolbar-row">
+            <el-row :gutter="10" class="table-toolbar mb8 toolbar-row">
               <el-col :span="1.5">
                 <el-button
                   type="primary"
@@ -112,7 +112,6 @@
                   异常挂载
                 </el-button>
               </el-col>
-              <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" />
             </el-row>
 
             <!-- 数据表格 -->
@@ -243,7 +242,7 @@
                   </el-form-item>
                 </search-form>
 
-                <el-row :gutter="10" class="mb8 toolbar-row">
+                <el-row :gutter="10" class="table-toolbar mb8 toolbar-row">
                   <el-col :span="1.5">
                     <el-button
                       type="primary"
@@ -256,7 +255,6 @@
                       选择
                     </el-button>
                   </el-col>
-                  <right-toolbar v-model:showSearch="showSearchSelect" @queryTable="getListDevice" />
                 </el-row>
 
                 <div class="table-wrapper">

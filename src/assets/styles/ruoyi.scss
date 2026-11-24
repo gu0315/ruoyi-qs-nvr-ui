@@ -72,6 +72,13 @@
   font-weight: 700;
 }
 
+/* 表格工具栏（新增、修改、删除、导出等）：靠右，右边缘与表格对齐（补能平台 2.0 规范 §4.2-B） */
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end !important;
+}
+
 /* 行内搜索表单：标签不换行，宽度按文字自适应（label-width 作为最小宽度） */
 .el-form--inline .el-form-item__label {
   white-space: nowrap;

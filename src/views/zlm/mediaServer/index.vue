@@ -1,8 +1,7 @@
 <template>
   <div class="app-container">
-    <div class="header-bar">
+    <div class="table-toolbar header-bar">
       <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
-      <right-toolbar :search="false" @queryTable="getList"></right-toolbar>
     </div>
 
     <div class="server-grid">
