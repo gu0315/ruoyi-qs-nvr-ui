@@ -45,6 +45,8 @@ import FileUpload from "@/components/FileUpload/index.vue"
 import ImageUpload from "@/components/ImageUpload/index.vue"
 // 图片预览组件
 import ImagePreview from "@/components/ImagePreview/index.vue"
+// 列表页筛选区（补能平台 2.0 规范）
+import SearchForm from "@/components/SearchForm/index.vue"
 // 字典标签组件
 import DictTag from '@/components/DictTag/index.vue'
 
@@ -67,6 +69,7 @@ app.component('Pagination', Pagination)
 app.component('FileUpload', FileUpload)
 app.component('ImageUpload', ImageUpload)
 app.component('ImagePreview', ImagePreview)
+app.component('SearchForm', SearchForm)
 app.component('RightToolbar', RightToolbar)
 app.component('Editor', Editor)
 

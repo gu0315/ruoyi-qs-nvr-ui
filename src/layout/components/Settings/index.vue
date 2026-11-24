@@ -105,6 +105,13 @@
       </span>
     </div>
 
+    <div class="drawer-item">
+      <span>搜索区卡片</span>
+      <span class="comp-style">
+        <el-switch v-model="settingsStore.searchCard" class="drawer-switch" />
+      </span>
+    </div>
+
     <el-divider />
 
     <div class="drawer-footer">
@@ -191,6 +198,7 @@ function saveSetting(): void {
     "sidebarLogo": storeSettings.value.sidebarLogo,
     "dynamicTitle": storeSettings.value.dynamicTitle,
     "footerVisible": storeSettings.value.footerVisible,
+    "searchCard": storeSettings.value.searchCard,
     "sideTheme": storeSettings.value.sideTheme,
     "theme": storeSettings.value.theme
   }

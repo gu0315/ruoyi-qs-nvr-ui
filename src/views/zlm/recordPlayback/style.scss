@@ -28,8 +28,10 @@ html.dark .record-splitpanes {
 /* Panel Header */
 .panel-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   padding: 10px 14px;
+  row-gap: 10px;
   background: var(--el-bg-color-page);
   border-bottom: 1px solid var(--el-border-color-lighter);
   font-weight: 500;
@@ -87,7 +89,7 @@ html.dark .record-splitpanes {
   }
 
   .header-switch {
-    margin-left: auto;
+    flex-basis: 100%;
     display: flex;
     align-items: center;
   }
@@ -104,6 +106,18 @@ html.dark .record-splitpanes {
 
 .tree-container {
   padding: 8px;
+}
+
+/* 左侧设备树一栏：去掉分割线，靠间距区分层次 */
+.tree-col {
+  .panel-header,
+  .date-panel {
+    border-bottom: none;
+  }
+
+  .panel-header {
+    padding-bottom: 4px;
+  }
 }
 
 /* 日期面板 */

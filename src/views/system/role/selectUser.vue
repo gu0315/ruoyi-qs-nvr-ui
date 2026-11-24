@@ -1,14 +1,13 @@
 <template>
    <!-- 授权用户 -->
    <el-dialog title="选择用户" v-model="visible" width="800px" top="5vh" append-to-body>
-      <el-form :model="queryParams" ref="queryRef" :inline="true">
+      <search-form :model="queryParams" ref="queryRef" plain @search="handleQuery" @reset="resetQuery">
          <el-form-item label="用户名称" prop="userName">
             <el-input
                v-model="queryParams.userName"
                placeholder="请输入用户名称"
                clearable
                style="width: 180px"
-               @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item label="手机号码" prop="phonenumber">
@@ -17,14 +16,9 @@
                placeholder="请输入手机号码"
                clearable
                style="width: 180px"
-               @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-         </el-form-item>
-      </el-form>
+      </search-form>
       <el-row>
          <el-table border @row-click="clickRow" ref="refTable" :data="userList" @selection-change="handleSelectionChange" height="260px">
             <el-table-column type="selection" width="55"></el-table-column>

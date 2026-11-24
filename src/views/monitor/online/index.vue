@@ -1,13 +1,12 @@
 <template>
   <div class="app-container">
     <div class="search-box">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px" class="query-form">
+      <search-form :model="queryParams" ref="queryRef" v-show="showSearch" @search="handleQuery" @reset="resetQuery">
         <el-form-item label="登录地址" prop="ipaddr">
           <el-input
             v-model="queryParams.ipaddr"
             placeholder="请输入登录地址"
             clearable
-            @keyup.enter="handleQuery"
           />
         </el-form-item>
         <el-form-item label="用户名称" prop="userName">
@@ -15,16 +14,9 @@
             v-model="queryParams.userName"
             placeholder="请输入用户名称"
             clearable
-            @keyup.enter="handleQuery"
           />
         </el-form-item>
-        <el-form-item class="form-actions">
-          <div class="button-group">
-            <el-button type="primary" icon="Search" @click="handleQuery" class="search-btn">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery" class="reset-btn">重置</el-button>
-          </div>
-        </el-form-item>
-      </el-form>
+      </search-form>
 
       <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
         <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>

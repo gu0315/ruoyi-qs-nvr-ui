@@ -1,13 +1,12 @@
 <template>
   <div class="app-container">
     <div class="search-box">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px" class="query-form">
+      <search-form :model="queryParams" ref="queryRef" v-show="showSearch" @search="handleQuery" @reset="resetQuery">
         <el-form-item label="表名称" prop="tableName">
           <el-input
             v-model="queryParams.tableName"
             placeholder="请输入表名称"
             clearable
-            @keyup.enter="handleQuery"
           />
         </el-form-item>
         <el-form-item label="表描述" prop="tableComment">
@@ -15,7 +14,6 @@
             v-model="queryParams.tableComment"
             placeholder="请输入表描述"
             clearable
-            @keyup.enter="handleQuery"
           />
         </el-form-item>
         <el-form-item label="创建时间">
@@ -28,13 +26,7 @@
             end-placeholder="结束日期"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item class="form-actions">
-          <div class="button-group">
-            <el-button type="primary" icon="Search" @click="handleQuery" class="search-btn">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery" class="reset-btn">重置</el-button>
-          </div>
-        </el-form-item>
-      </el-form>
+      </search-form>
 
       <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
         <el-col :span="1.5">

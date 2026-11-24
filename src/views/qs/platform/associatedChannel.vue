@@ -5,13 +5,12 @@
       <el-tab-pane label="已关联" :name="true"/>
 
       <div class="search-panel" v-show="showSearch">
-        <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
+        <search-form :model="queryParams" ref="queryRef" plain @search="handleQuery" @reset="resetQuery">
           <el-form-item label="设备名称" prop="deviceName">
             <el-input
               v-model="queryParams.deviceName"
               placeholder="请输入设备名称"
               clearable
-              @keyup.enter="handleQuery"
             />
           </el-form-item>
           <el-form-item label="IP地址" prop="ipAddress">
@@ -19,7 +18,6 @@
               v-model="queryParams.ipAddress"
               placeholder="请输入IP地址"
               clearable
-              @keyup.enter="handleQuery"
             />
           </el-form-item>
           <el-form-item label="接入类型" prop="type">
@@ -38,11 +36,7 @@
               <el-option label="在线" value="ON"/>
             </el-select>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
+        </search-form>
       </div>
 
       <el-row :gutter="10" class="mb8">

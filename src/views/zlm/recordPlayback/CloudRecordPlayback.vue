@@ -12,12 +12,7 @@
               </div>
               <span>设备列表</span>
               <div class="header-switch">
-                <el-switch
-                    v-model="showRegion"
-                    active-text="行政区划"
-                    inactive-text="业务分组"
-                    @change="handleTreeTypeChange"
-                />
+                <tree-type-switch v-model="showRegion" @change="handleTreeTypeChange" />
               </div>
             </div>
             <div class="tree-container">
@@ -273,6 +268,7 @@
 </template>
 
 <script setup lang="ts" name="CloudRecordPlayback">
+import TreeTypeSwitch from '@/components/TreeTypeSwitch/index.vue'
 import useClipboard from 'vue-clipboard3'
 import screenfull from 'screenfull'
 import moment from 'moment'

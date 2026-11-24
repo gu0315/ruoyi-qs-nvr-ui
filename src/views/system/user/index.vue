@@ -52,12 +52,12 @@
         <pane size="84">
           <el-col>
             <div class="search-box">
-              <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px" class="query-form">
+              <search-form :model="queryParams" ref="queryRef" v-show="showSearch" @search="handleQuery" @reset="resetQuery">
                 <el-form-item label="用户名称" prop="userName">
-                  <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable @keyup.enter="handleQuery" />
+                  <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable />
                 </el-form-item>
                 <el-form-item label="手机号码" prop="phonenumber">
-                  <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable @keyup.enter="handleQuery" />
+                  <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable />
                 </el-form-item>
                 <el-form-item label="状态" prop="status">
                   <el-select v-model="queryParams.status" placeholder="用户状态" clearable style="width: 240px">
@@ -67,13 +67,7 @@
                 <el-form-item label="创建时间">
                   <el-date-picker v-model="dateRange" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
                 </el-form-item>
-                <el-form-item class="form-actions">
-                  <div class="button-group">
-                    <el-button type="primary" icon="Search" @click="handleQuery" class="search-btn">搜索</el-button>
-                    <el-button icon="Refresh" @click="resetQuery" class="reset-btn">重置</el-button>
-                  </div>
-                </el-form-item>
-              </el-form>
+              </search-form>
 
               <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
                 <el-col :span="1.5">

@@ -71,6 +71,13 @@
 .el-form .el-form-item__label {
   font-weight: 700;
 }
+
+/* 行内搜索表单：标签不换行，宽度按文字自适应（label-width 作为最小宽度） */
+.el-form--inline .el-form-item__label {
+  white-space: nowrap;
+  width: auto !important;
+  min-width: 68px;
+}
 .el-dialog:not(.is-fullscreen) {
   margin-top: 6vh !important;
 }

@@ -16,13 +16,12 @@
         <el-alert title="清除后设备可正常添加到业务分组，添加可以自动添加对应的业务分组节点。" type="success"
                   :closable="false" style="margin-bottom: 20px"/>
 
-        <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="80px" class="query-form">
+        <search-form :model="queryParams" ref="queryRef" v-show="showSearch" plain @search="handleQuery" @reset="resetQuery">
           <el-form-item label="设备名称" prop="deviceName">
             <el-input
                 v-model="queryParams.deviceName"
                 placeholder="请输入设备名称"
                 clearable
-                @keyup.enter="handleQuery"
                 prefix-icon="VideoCamera"
             />
           </el-form-item>
@@ -31,7 +30,6 @@
                 v-model="queryParams.ipAddress"
                 placeholder="请输入IP地址"
                 clearable
-                @keyup.enter="handleQuery"
                 prefix-icon="MapLocation"
             />
           </el-form-item>
@@ -55,13 +53,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item class="form-actions">
-            <div class="button-group">
-              <el-button type="primary" icon="Search" @click="handleQuery" class="search-btn">搜索</el-button>
-              <el-button icon="Refresh" @click="resetQuery" class="reset-btn">重置</el-button>
-            </div>
-          </el-form-item>
-        </el-form>
+        </search-form>
 
         <el-row :gutter="10" class="mb8 toolbar-row">
           <el-col :span="1.5">

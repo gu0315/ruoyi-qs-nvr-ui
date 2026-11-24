@@ -7,23 +7,13 @@
       </div>
       <span>设备列表</span>
       <div class="header-switch">
-        <el-switch
-            v-model="showRegion"
-            active-text="行政区划"
-            inactive-text="业务分组"
-            @change="change"
-        />
+        <tree-type-switch v-model="showRegion" @change="change" />
       </div>
     </div>
 
     <div class="tree-content">
       <div v-if="!showHeader" class="switch-container">
-        <el-switch
-            v-model="showRegion"
-            active-text="行政区划"
-            inactive-text="业务分组"
-            @change="change"
-        />
+        <tree-type-switch v-model="showRegion" @change="change" />
       </div>
       <div class="tree-wrapper">
         <RegionTree
@@ -56,6 +46,7 @@
 </template>
 
 <script setup name="DeviceTree" lang="ts">
+import TreeTypeSwitch from '@/components/TreeTypeSwitch/index.vue'
 import GroupTree from "@/views/components/common/GroupTree.vue";
 import RegionTree from "@/views/components/common/RegionTree.vue";
 import { VideoCamera } from '@element-plus/icons-vue';
@@ -127,9 +118,10 @@ defineExpose({
 /* Panel Header - 参考 DeviceRecordPlayback 的设计 */
 .panel-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter);
+  padding: 12px 14px 4px;
+  row-gap: 10px;
   font-weight: 500;
   color: var(--el-text-color-primary);
   font-size: 13px;
@@ -159,7 +151,7 @@ defineExpose({
   }
 
   .header-switch {
-    margin-left: auto;
+    flex-basis: 100%;
   }
 }
 
@@ -168,7 +160,6 @@ defineExpose({
   justify-content: center;
   align-items: center;
   padding: 8px 12px;
-  border-bottom: 1px solid var(--el-border-color-lighter);
   flex-shrink: 0;
 }
 
@@ -177,7 +168,7 @@ defineExpose({
   overflow: hidden !important;
   width: 100%;
   margin: 0;
-  padding: 8px;
+  padding: 8px 10px;
   position: relative;
   background: var(--el-bg-color);
   display: flex;

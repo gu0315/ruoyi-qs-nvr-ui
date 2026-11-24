@@ -42,18 +42,13 @@
     <div class="dashboard-content">
       <div class="dashboard-panel left-panel">
         <div class="panel-card">
-          <div class="panel-title">
+          <div class="panel-title panel-title--tree">
             <div class="title-icon">
               <el-icon><List /></el-icon>
             </div>
             <span>设备列表</span>
-            <div class="panel-tools">
-              <el-switch
-                v-model="showRegion"
-                active-text="行政区划"
-                inactive-text="业务分组"
-                @change="handleTreeTypeChange"
-              />
+            <div class="panel-tools tree-switch-row">
+              <tree-type-switch v-model="showRegion" @change="handleTreeTypeChange" />
             </div>
           </div>
           <div class="panel-body device-list">
@@ -423,6 +418,7 @@
 </template>
 
 <script setup lang="ts" name="Dashboard">
+import TreeTypeSwitch from '@/components/TreeTypeSwitch/index.vue'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, getCurrentInstance, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElLoading } from 'element-plus'
@@ -2233,6 +2229,23 @@ function handleResourceTabChange(tabName: string) {
   }
 }
 
+/* 设备列表面板：切换控件单独一行 */
+.panel-title--tree {
+  flex-wrap: wrap;
+  row-gap: 10px;
+  border-bottom: none;
+  padding-bottom: 4px;
+}
+
+.tree-switch-row {
+  flex-basis: 100%;
+  margin-left: 0 !important;
+  --tts-bg: rgba(255, 255, 255, 0.06);
+  --tts-color: rgba(255, 255, 255, 0.6);
+  --tts-active-bg: rgba(59, 130, 246, 0.35);
+  --tts-active-color: #fff;
+}
+
 .panel-tools {
   margin-left: auto;
   display: flex;
@@ -2591,17 +2604,21 @@ function handleResourceTabChange(tabName: string) {
     .el-input-group__prepend {
       background: rgba(30, 41, 59, 0.8) !important;
       border-color: rgba(59, 130, 246, 0.2) !important;
-      
-      .refresh-btn {
-        background: rgba(30, 41, 59, 0.8) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        
-        &:hover {
-          background: rgba(59, 130, 246, 0.2) !important;
-          color: #60a5fa !important;
-        }
-      }
     }
+  }
+
+  ::v-deep .search-area .refresh-btn {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(59, 130, 246, 0.2) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+
+    &:hover {
+      background: rgba(59, 130, 246, 0.2) !important;
+      color: #60a5fa !important;
+    }
+  }
+
+  ::v-deep .search-input {
     
     .el-input-group__append {
       background: rgba(30, 41, 59, 0.8) !important;

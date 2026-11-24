@@ -1,13 +1,12 @@
 <template>
   <div class="app-container">
     <div class="search-box">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px" class="query-form">
+      <search-form :model="queryParams" ref="queryRef" v-show="showSearch" @search="handleQuery" @reset="resetQuery">
       <el-form-item label="设备名称" prop="deviceName">
         <el-input
             v-model="queryParams.deviceName"
             placeholder="请输入设备名称"
             clearable
-            @keyup.enter="handleQuery"
             prefix-icon="VideoCamera"
         />
       </el-form-item>
@@ -16,7 +15,6 @@
             v-model="queryParams.ipAddress"
             placeholder="请输入IP地址"
             clearable
-            @keyup.enter="handleQuery"
             prefix-icon="MapLocation"
         />
       </el-form-item>
@@ -50,13 +48,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item class="form-actions">
-        <div class="button-group">
-          <el-button type="primary" icon="Search" @click="handleQuery" class="search-btn">搜索</el-button>
-          <el-button icon="Refresh" @click="resetQuery" class="reset-btn">重置</el-button>
-        </div>
-      </el-form-item>
-    </el-form>
+    </search-form>
 
     <el-row :gutter="10" class="mb8 toolbar-row action-buttons">
       <el-col :span="1.5">
@@ -265,175 +257,24 @@
       </el-table>
     </div>
 
-    <!-- 卡片视图 -->
-    <div v-else class="card-view" v-loading="loading">
-      <div v-if="deviceList.length > 0" class="card-grid">
-        <div class="device-card" :class="{ 'is-selected': item.checked, 'is-online': item.deviceStatus === 'ON' }" v-for="item in deviceList" :key="item.id">
-            <!-- 媒体区 -->
-            <div class="card-media">
-              <div class="media-inner">
-                <image-preview v-if="item.snap" :src="item.snap" :width="'100%'" :height="'100%'" />
-                <div v-else class="snapshot-placeholder">
-                  <el-icon><Picture /></el-icon>
-                  <span>暂无截图</span>
-                </div>
-              </div>
-              
-              <!-- 左上角复选框 -->
-              <el-checkbox v-model="item.checked" @change="handleCardSelection" class="card-checkbox" />
-              
-              <!-- 底部玻璃信息条 -->
-              <div class="media-glass-bar">
-                <h3 class="bar-device-name" :title="item.deviceName">{{ item.deviceName }}</h3>
-                <div class="status-indicator" :class="item.deviceStatus === 'ON' ? 'online' : 'offline'">
-                  <span class="status-dot" :class="item.deviceStatus === 'ON' ? 'pulse' : 'breathe'"></span>
-                  <span class="status-text">{{ item.deviceStatus === 'ON' ? '在线' : '离线' }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 信息区 -->
-            <div class="card-info">
-              <div class="info-tags">
-                <span class="info-tag">
-                  <span class="tag-label">ID</span>
-                  <span class="tag-val">{{ item.id }}</span>
-                </span>
-                <span class="info-tag">
-                  <span class="tag-label">IP</span>
-                  <span class="tag-val">{{ item.ipAddress || '-' }}</span>
-                </span>
-                <dict-tag :options="qs_live_stream_type" :value="item.type" size="small" class="type-tag" />
-              </div>
-
-              <div class="info-channel">
-                <span class="channel-label">通道</span>
-                <span class="channel-val">{{ item.channel !== '' && item.channel !== null ? item.channel : item.gbChannelId || '-' }}</span>
-              </div>
-
-              <div class="info-footer">
-                <el-switch
-                  v-model="item.status"
-                  active-value="ENABLE"
-                  inactive-value="DEACTIVATE"
-                  @change="handleStatusChange(item)"
-                  size="small"
-                />
-                <span class="remark" v-if="item.remark" :title="item.remark">{{ item.remark }}</span>
-              </div>
-            </div>
-
-            <!-- 操作栏 -->
-            <div class="card-toolbar">
-              <el-button
-                type="primary"
-                size="small"
-                icon="VideoPlay"
-                @click="handlePlay(item)"
-                :loading="item.loading"
-                :disabled="item.deviceStatus !== 'ON'"
-                class="btn-play"
-              >
-                播放
-              </el-button>
-              <div class="toolbar-actions">
-                <el-tooltip content="停止" v-if="item.streamStatus === '1' && item.type !== '13'">
-                  <el-button
-                    type="danger"
-                    text
-                    bg
-                    size="small"
-                    icon="SwitchButton"
-                    @click="handleStopPlay(item)"
-                  />
-                </el-tooltip>
-                <el-tooltip content="接入地址" v-if="item.type === '13'">
-                  <el-button
-                    type="success"
-                    text
-                    bg
-                    size="small"
-                    icon="Position"
-                    @click="handleAccessAddress(item)"
-                  />
-                </el-tooltip>
-                <el-tooltip content="云端录像">
-                  <el-button
-                    type="primary"
-                    text
-                    bg
-                    size="small"
-                    icon="VideoCamera"
-                    @click="handleCloudRecord(item)"
-                  />
-                </el-tooltip>
-                <el-tooltip content="设备录像" v-if="!['1', '2', '3', '4', '6', '13'].includes(item.type)">
-                  <el-button
-                    type="primary"
-                    text
-                    bg
-                    size="small"
-                    icon="Monitor"
-                    @click="handleDeviceRecord(item)"
-                  />
-                </el-tooltip>
-                
-                <!-- 刷新设备状态和通道（GB28181） -->
-                <el-tooltip content="刷新" v-if="item.type === '12'">
-                  <el-button
-                    type="success"
-                    text
-                    bg
-                    size="small"
-                    icon="Refresh"
-                    :loading="item.refreshing"
-                    @click="handleRefreshDevice(item)"
-                  />
-                </el-tooltip>
-                
-                <!-- 更多操作下拉菜单 -->
-                <el-dropdown @command="(command) => handleMoreAction(command, item)" trigger="click" style="margin-left: 12px;">
-                  <el-button
-                    type="primary"
-                    text
-                    bg
-                    size="small"
-                    icon="More"
-                  />
-                  <template #dropdown>
-                    <el-dropdown-menu class="device-dropdown-menu">
-                      <el-dropdown-item command="edit" icon="Edit">编辑</el-dropdown-item>
-                      <el-dropdown-item command="viewSnapshots" icon="Picture">查看抓图</el-dropdown-item>
-                      <el-dropdown-item command="delete" icon="Delete" class="is-danger">删除</el-dropdown-item>
-                      <!-- 目录订阅/取消订阅（GB28181） -->
-                      <el-dropdown-item v-if="item.type === '12' && item.subscribeCatalogStatus !== 1" :disabled="item.deviceStatus !== 'ON'" command="subscribeCatalog" icon="Connection">目录订阅</el-dropdown-item>
-                      <el-dropdown-item v-if="item.type === '12' && item.subscribeCatalogStatus === 1" :disabled="item.deviceStatus !== 'ON'" command="unsubscribeCatalog" icon="SwitchButton">取消目录订阅</el-dropdown-item>
-                      <!-- 设备校时（海康/大华/海康ISUP/ONVIF） -->
-                      <el-dropdown-item v-if="item.type === '5' || item.type === '7' || item.type === '8' || item.type === '9'" :disabled="item.deviceStatus !== 'ON'" command="timeSync" icon="Clock" class="time-sync-item">校时</el-dropdown-item>
-                      <!-- 设备信息（大华/海康/海康ISUP/GB28181/ONVIF） -->
-                      <el-dropdown-item v-if="item.type === '5' || item.type === '7' || item.type === '8' || item.type === '9' || item.type === '12' || item.type === '14'" :disabled="item.deviceStatus !== 'ON'" command="deviceInfo" icon="InfoFilled" class="time-sync-item">设备信息</el-dropdown-item>
-                      <!-- 设备抓图（海康/海康ISUP/大华/ONVIF） -->
-                      <el-dropdown-item v-if="item.type === '5' || item.type === '7' || item.type === '8' || item.type === '9'" :disabled="item.deviceStatus !== 'ON'" command="capture" icon="Camera">抓图</el-dropdown-item>
-                      <!-- 设备重启（海康/大华/海康ISUP/GB28181/JT1078/ONVIF） -->
-                  <el-dropdown-item v-if="item.type === '5' || item.type === '7' || item.type === '8' || item.type === '9' || item.type === '12' || item.type === '14'" :disabled="item.deviceStatus !== 'ON'" command="reboot" icon="Refresh" class="is-danger">重启</el-dropdown-item>
-                      <!-- GB28181录像控制 -->
-                  <el-dropdown-item v-if="item.type === '12'" :disabled="item.deviceStatus !== 'ON'" command="recordControl" icon="VideoCamera">录像控制</el-dropdown-item>
-                  <!-- 设备配置查询 -->
-                  <el-dropdown-item v-if="item.type === '12'" :disabled="item.deviceStatus !== 'ON'" command="deviceConfig" icon="Setting">设备配置</el-dropdown-item>
-                  <!-- 录像下载 -->
-                      <el-dropdown-item v-if="item.type === '7' || item.type === '8' || item.type === '9'" :disabled="item.deviceStatus !== 'ON'" command="downloadRecord" icon="Download">录像下载</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </div>
-            </div>
-          </div>
-      </div>
-      <el-empty v-else description="暂无设备数据" />
-    </div>
+    <!-- 卡片视图：按录像机（国标设备）分组展示通道 -->
+    <device-group-view
+        v-else
+        :devices="deviceList"
+        :loading="loading"
+        :live-stream-types="qs_live_stream_type"
+        @play="handlePlay"
+        @stop="handleStopPlay"
+        @cloud-record="handleCloudRecord"
+        @access-address="handleAccessAddress"
+        @more="handleGroupViewMore"
+        @selection-change="handleCardSelection"
+        @refresh="handleRefreshDevice"
+        @add-channel="handleAddGbChannel"
+    />
 
     <pagination
-        v-show="total>0"
+        v-show="total>0 && viewMode === 'list'"
         :total="total"
         v-model:page="queryParams.pageNum"
         v-model:limit="queryParams.pageSize"
@@ -5065,6 +4906,7 @@ import MediaInfo from "@/components/Channel/mediaInfo.vue";
 import SelectMapPosition from '@/components/SelectMapPosition';
 import ChannelCode from '@/views/components/common/channelCode.vue';
 import DeviceSnapshotDialog from '@/components/DeviceSnapshotDialog/index.vue';
+import DeviceGroupView from './components/DeviceGroupView.vue';
 import {getOnvifDeviceList, onvifLogin, restartOnvifDevice, syncOnvifDeviceTime, getOnvifDeviceTime, getOnvifDeviceInfo, captureOnvifAndSave, getOnvifStorageConfigurations, getOnvifStorageCapabilities, getOnvifStorageState, getOnvifNetworkInterfaces, getOnvifNetworkProtocols, getOnvifVideoSourceConfigs, getOnvifVideoEncoderConfigs, getOnvifAudioSourceConfigs, getOnvifAudioEncoderConfigs, getOnvifVideoOutputConfigs} from "@/api/qs/onvif";
 import {getAllDevices, getChannelsByDeviceId, refreshDevice, rebootGb28181Device, recordCmd, queryDeviceStatus, queryDeviceInfo, subscribeCatalog, unsubscribeCatalog, queryDeviceConfig, updateDeviceConfig, queryHomePosition, updateHomePosition, queryCruiseTrackList, queryCruiseTrack, queryPTZPosition, homePositionControl, ptzPreciseControl, startCruise, stopCruise, querySDCardStatus, formatSDCardControl} from "@/api/qs/gb28181";
 import type {Gb28181Device, Gb28181Channel} from "@/types/api/qs/gb28181";
@@ -5898,11 +5740,18 @@ const data = reactive({
 
 const {queryParams, form, rules, showAdvanced} = toRefs(data)
 
+/** 分组视图一次拉取的最大设备数 */
+const GROUP_VIEW_PAGE_SIZE = 1000
+
 /** 查询视频监控设备列表 */
 function getList() {
   loading.value = true
   queryParams.value.params = {}
-  listDevice(queryParams.value).then(response => {
+  // 卡片（分组）视图需要完整数据才能按录像机分组，不分页
+  const query = viewMode.value === 'card'
+    ? { ...queryParams.value, pageNum: 1, pageSize: GROUP_VIEW_PAGE_SIZE }
+    : queryParams.value
+  listDevice(query).then(response => {
     // 为每个设备添加 checked 属性用于卡片视图的选择
     deviceList.value = response.rows.map((item: any) => ({
       ...item,
@@ -5998,6 +5847,32 @@ function handleCardSelection() {
   single.value = selectedItems.length != 1
   multiple.value = !selectedItems.length
 }
+
+/** 分组视图：卡片上的更多操作 */
+function handleGroupViewMore(command: string, row: QsDevice) {
+  if (command === '__deviceRecord') {
+    handleDeviceRecord(row)
+  } else if (command === '__toggleStatus') {
+    row.status = row.status === 'ENABLE' ? 'DEACTIVATE' : 'ENABLE'
+    handleStatusChange(row)
+  } else {
+    handleMoreAction(command, row)
+  }
+}
+
+/** 分组视图：给录像机添加国标通道 */
+function handleAddGbChannel(gbDeviceId: string) {
+  handleAdd()
+  form.value.type = '12'
+  getAllDevices().then((res) => {
+    gb28181DeviceList.value = res.data
+    form.value.gbDeviceId = gbDeviceId
+    gbDeviceChange(gbDeviceId)
+  })
+}
+
+/** 切换列表 / 卡片视图时重新查询（两种视图的分页方式不同） */
+watch(viewMode, () => getList())
 
 /** 新增按钮操作 */
 function handleAdd() {

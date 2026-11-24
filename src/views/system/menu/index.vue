@@ -1,14 +1,13 @@
 <template>
    <div class="app-container page-fade-in">
       <transition name="search-slide">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" class="search-card">
+      <search-form :model="queryParams" ref="queryRef" v-show="showSearch" @search="handleQuery" @reset="resetQuery">
          <el-form-item label="菜单名称" prop="menuName">
             <el-input
                v-model="queryParams.menuName"
                placeholder="请输入菜单名称"
                clearable
                style="width: 200px"
-               @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item label="状态" prop="status">
@@ -21,11 +20,7 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-         </el-form-item>
-      </el-form>
+      </search-form>
       </transition>
 
       <el-row :gutter="10" class="mb8">

@@ -36,20 +36,12 @@
             </div>
 
             <!-- 查询表单 -->
-            <el-form
-              :model="queryParams"
-              ref="queryRef"
-              :inline="true"
-              v-show="showSearch"
-              label-width="80px"
-              class="query-form"
-            >
+            <search-form :model="queryParams" ref="queryRef" v-show="showSearch" @search="handleQuery" @reset="resetQuery">
               <el-form-item label="设备名称" prop="deviceName">
                 <el-input
                   v-model="queryParams.deviceName"
                   placeholder="请输入设备名称"
                   clearable
-                  @keyup.enter="handleQuery"
                   prefix-icon="VideoCamera"
                 />
               </el-form-item>
@@ -58,7 +50,6 @@
                   v-model="queryParams.ipAddress"
                   placeholder="请输入IP地址"
                   clearable
-                  @keyup.enter="handleQuery"
                   prefix-icon="MapLocation"
                 />
               </el-form-item>
@@ -82,15 +73,7 @@
                   />
                 </el-select>
               </el-form-item>
-              <el-form-item class="form-actions">
-                <div class="button-group">
-                  <el-button type="primary" icon="Search" @click="handleQuery" class="search-btn">
-                    搜索
-                  </el-button>
-                  <el-button icon="Refresh" @click="resetQuery" class="reset-btn">重置</el-button>
-                </div>
-              </el-form-item>
-            </el-form>
+            </search-form>
 
             <!-- 操作按钮区 -->
             <el-row :gutter="10" class="mb8 toolbar-row">
@@ -221,20 +204,12 @@
               align-center
             >
               <div class="dialog-body">
-                <el-form
-                  :model="queryParamsSelect"
-                  ref="querySelectRef"
-                  :inline="true"
-                  v-show="showSearchSelect"
-                  label-width="80px"
-                  class="query-form"
-                >
+                <search-form :model="queryParamsSelect" ref="querySelectRef" v-show="showSearchSelect" plain @search="handleSelectQuery" @reset="resetSelectQuery">
                   <el-form-item label="设备名称" prop="deviceName">
                     <el-input
                       v-model="queryParamsSelect.deviceName"
                       placeholder="请输入设备名称"
                       clearable
-                      @keyup.enter="handleSelectQuery"
                       prefix-icon="VideoCamera"
                     />
                   </el-form-item>
@@ -243,7 +218,6 @@
                       v-model="queryParamsSelect.ipAddress"
                       placeholder="请输入IP地址"
                       clearable
-                      @keyup.enter="handleSelectQuery"
                       prefix-icon="MapLocation"
                     />
                   </el-form-item>
@@ -267,15 +241,7 @@
                       />
                     </el-select>
                   </el-form-item>
-                  <el-form-item class="form-actions">
-                    <div class="button-group">
-                      <el-button type="primary" icon="Search" @click="handleSelectQuery" class="search-btn">
-                        搜索
-                      </el-button>
-                      <el-button icon="Refresh" @click="resetSelectQuery" class="reset-btn">重置</el-button>
-                    </div>
-                  </el-form-item>
-                </el-form>
+                </search-form>
 
                 <el-row :gutter="10" class="mb8 toolbar-row">
                   <el-col :span="1.5">

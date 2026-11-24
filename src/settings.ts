@@ -55,6 +55,11 @@ export default {
   footerVisible: false,
 
   /**
+   * 列表页搜索区是否显示为卡片（白底圆角，补能平台 2.0 规范）
+   */
+  searchCard: false,
+
+  /**
    * 底部版权文本内容
    */
   footerContent: 'Copyright © 2018-2026 RuoYi. All Rights Reserved.'

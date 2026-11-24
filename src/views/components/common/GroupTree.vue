@@ -14,10 +14,10 @@
             <el-checkbox v-model="checked" label="编号" class="index-checkbox" />
           </el-tooltip>
         </template>
-        <template #prepend>
-          <el-button @click="refresh" class="refresh-btn" :icon="Refresh" title="刷新" />
-        </template>
       </el-input>
+      <el-tooltip content="刷新" placement="top">
+        <el-button @click="refresh" class="refresh-btn" :icon="Refresh" aria-label="刷新" />
+      </el-tooltip>
     </div>
 
     <!-- 树形组件 -->
@@ -562,43 +562,34 @@ defineExpose({
   }
 }
 
-/* ========== 搜索区域 ========== */
+/* ========== 搜索区域：搜索框 + 独立的刷新按钮 ========== */
 .search-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 0 4px 12px;
   flex-shrink: 0;
 
   .search-input {
+    flex: 1;
+    min-width: 0;
+
     :deep(.el-input__wrapper) {
-      border-radius: 8px 0 0 8px;
+      border-radius: 8px;
       box-shadow: 0 0 0 1px var(--el-border-color-light) inset;
       transition: all 0.3s;
+
+      &:hover {
+        box-shadow: 0 0 0 1px var(--el-border-color) inset;
+      }
 
       &:focus-within {
         box-shadow: 0 0 0 1px var(--el-color-primary) inset, 0 0 0 3px var(--el-color-primary-light-8);
       }
     }
 
-    :deep(.el-input-group__prepend) {
-      padding: 0;
-      background: transparent;
+    &.el-input-group--append :deep(.el-input__wrapper) {
       border-radius: 8px 0 0 8px;
-      overflow: hidden;
-
-      .refresh-btn {
-        border: none;
-        border-radius: 0;
-        margin: 0;
-        height: 100%;
-        padding: 0 12px;
-        background: var(--el-fill-color-light);
-        color: var(--el-text-color-regular);
-        transition: all 0.3s;
-
-        &:hover {
-          background: var(--el-color-primary-light-9);
-          color: var(--el-color-primary);
-        }
-      }
     }
 
     :deep(.el-input-group__append) {
@@ -617,6 +608,23 @@ defineExpose({
           padding-left: 4px;
         }
       }
+    }
+  }
+
+  .refresh-btn {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin: 0;
+    border-radius: 8px;
+    border-color: var(--el-border-color-light);
+    color: var(--el-text-color-regular);
+
+    &:hover {
+      border-color: var(--el-color-primary-light-5);
+      background: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
     }
   }
 }
@@ -1022,10 +1030,12 @@ defineExpose({
 /* ========== 暗黑模式适配 ========== */
 html.dark {
   .group-tree-container {
+    .refresh-btn {
+      background: var(--el-bg-color-overlay);
+    }
+
     .search-input {
-      :deep(.el-input-group__prepend .refresh-btn) {
-        background: var(--el-bg-color-overlay);
-      }
+      
 
       :deep(.el-input-group__append) {
         background: var(--el-bg-color-overlay);
