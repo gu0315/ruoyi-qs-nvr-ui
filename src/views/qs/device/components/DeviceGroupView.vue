@@ -102,6 +102,7 @@
 
 <script setup lang="ts" name="DeviceGroupView">
 import { computed, reactive, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 import {
   ArrowRight, MoreFilled, Refresh, Plus, Picture, Loading, CaretRight, VideoCamera,
   SwitchButton, Position, Film, Edit, Monitor, Delete, Microphone
@@ -214,9 +215,10 @@ const toggle = (g: Group) => { openState[g.key] = !isOpen(g) }
 const toggleExpand = (g: Group) => { expanded[g.key] = !expanded[g.key] }
 const shownVideos = (g: Group) => expanded[g.key] ? g.videos : g.videos.slice(0, PAGE)
 
+/** 点卡片 = 播放；离线时只提示，编辑统一走右上角「…」菜单 */
 function handleCardClick(row: Row) {
   if (isOnline(row)) emit('play', row)
-  else emit('more', 'edit', row)
+  else ElMessage.warning('设备离线，无法播放')
 }
 
 function handleGroupCommand(command: string, g: Group) {
